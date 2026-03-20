@@ -20,6 +20,9 @@
     "VISION5E.SETTINGS.defaultHearingRange.hint": "Configure how far tokens can hear by default. Requires the world to be reloaded.",
     "VISION5E.SETTINGS.spectatorMode.label": "Spectator Mode",
     "VISION5E.SETTINGS.spectatorMode.hint": "Configure whether tokens belonging to actors the player has limited permissions for can provide vision when all of the player's own tokens are defeated, petrified, or unconscious.",
+    "VISION5E.SETTINGS.allowPlayerSpectatorModeAnytime.label": "Allow Players to Use Spectator Mode Anytime",
+    "VISION5E.SETTINGS.allowPlayerSpectatorModeAnytime.hint": "Allow players to manually enable Spectator Mode from Token controls even while they still control a token that can perceive. When enabled, shared spectator vision is added on top of their own token vision.",
+    "VISION5E.CONTROLS.playerSpectatorMode.label": "Enable Spectator Mode",
     "VISION5E.TOOLTIPS.AutomaticallyManaged": "Automatically managed by Vision 5e",
     "VISION5E.TOOLTIPS.SelectVisionMode": "Select Vision Mode"
 }

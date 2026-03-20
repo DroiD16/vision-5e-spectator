@@ -20,6 +20,9 @@
     "VISION5E.SETTINGS.defaultHearingRange.hint": "Nastaví, jak daleko tokeny ve výchozím nastavení slyší. Vyžaduje znovunačtení světa.",
     "VISION5E.SETTINGS.spectatorMode.label": "Povolit režim pozorovatele?",
     "VISION5E.SETTINGS.spectatorMode.hint": "Po zaškrtnutí budou tokeny aktérů, pro které má hráč omezená oprávnění, poskytovat vidění, i když jsou všechny tokeny hráče poraženy, zkamenělé, nebo v bezvědomí.",
+    "VISION5E.SETTINGS.allowPlayerSpectatorModeAnytime.label": "Povolit hráčům použít režim pozorovatele kdykoli",
+    "VISION5E.SETTINGS.allowPlayerSpectatorModeAnytime.hint": "Umožní hráčům ručně zapnout režim pozorovatele v ovládání tokenů, i když stále ovládají token, který může něco vnímat. Pokud je aktivní, sdílené vidění pozorovatele se přidá k vidění jejich vlastního tokenu.",
+    "VISION5E.CONTROLS.playerSpectatorMode.label": "Zapnout režim pozorovatele",
     "VISION5E.TOOLTIPS.AutomaticallyManaged": "Automaticky spravováno modulem Vision 5e",
     "VISION5E.TOOLTIPS.SelectVisionMode": "Vyber režim vidění"
 }

@@ -17,6 +17,9 @@
     "VISION5E.WitchSight": "Visión Bruja",
     "VISION5E.SETTINGS.defaultHearingRange.label": "Distancia de audición por defecto",
     "VISION5E.SETTINGS.defaultHearingRange.hint": "Configura que tan lejos pueden oír los tokens por defecto. Requiere que el mundo sea recargado.",
+    "VISION5E.SETTINGS.allowPlayerSpectatorModeAnytime.label": "Permitir a los jugadores usar el modo espectador en cualquier momento",
+    "VISION5E.SETTINGS.allowPlayerSpectatorModeAnytime.hint": "Permite a los jugadores activar manualmente el modo espectador desde los controles de token incluso si aún controlan un token que puede percibir. Cuando está activo, la visión compartida de espectador se añade a la visión de su propio token.",
+    "VISION5E.CONTROLS.playerSpectatorMode.label": "Activar modo espectador",
     "VISION5E.TOOLTIPS.AutomaticallyManaged": "Gestionado automáticamente por Vision 5e",
     "VISION5E.TOOLTIPS.SelectVisionMode": "Sélectionner type de vision"
 }
