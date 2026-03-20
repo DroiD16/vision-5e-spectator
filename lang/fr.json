@@ -17,6 +17,9 @@
     "VISION5E.WitchSight": "Vision sorcière",
     "VISION5E.SETTINGS.defaultHearingRange.label": "Distance d'audition par défaut",
     "VISION5E.SETTINGS.defaultHearingRange.hint": "Configurez la distance jusqu'où les tokens peuvent entendre par défaut. Un redémarrage du monde est nécessaire.",
+    "VISION5E.SETTINGS.allowPlayerSpectatorModeAnytime.label": "Autoriser les joueurs à utiliser le mode spectateur à tout moment",
+    "VISION5E.SETTINGS.allowPlayerSpectatorModeAnytime.hint": "Autorise les joueurs à activer manuellement le mode spectateur depuis les contrôles de token, même s'ils contrôlent encore un token capable de percevoir. Lorsqu'il est actif, la vision partagée du spectateur s'ajoute à la vision de leur propre token.",
+    "VISION5E.CONTROLS.playerSpectatorMode.label": "Activer le mode spectateur",
     "VISION5E.TOOLTIPS.AutomaticallyManaged": "Géré automatiquement par Vision 5e",
     "VISION5E.TOOLTIPS.SelectVisionMode": "Seleccionar modo de visión"
 }

@@ -160,6 +160,8 @@ _Note: Pre V14 the icon is <img src="https://raw.githubusercontent.com/FortAweso
 
 While a player owns/observes only tokens with vision that are _defeated_ (_dead_), _petrified_, or _unconscious_, tokens with vision owned by other players become a source of vision for this player if they have limited permission for the token's actor. This behavior aims to prevent players from missing out on all the fun when their character dies, is knocked unconscious, or is petrified, which are all conditions which make the token not perceive anything and are likely to affect the character more than one round of combat.
 
+Optionally, the GM can allow players to manually enable _Spectator Mode_ from the _Token Controls_ toolbar even while they still control a token that can perceive. When enabled, spectator vision is added on top of the player's own token vision without replacing it.
+
 ---
 
 ### Active Effects

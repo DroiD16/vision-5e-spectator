@@ -20,6 +20,9 @@
     "VISION5E.SETTINGS.defaultHearingRange.hint": "Legt fest, wie weit Spielfiguren standardmäßig hören können. Erfordert Neuladen.",
     "VISION5E.SETTINGS.spectatorMode.label": "Zuschauermodus",
     "VISION5E.SETTINGS.spectatorMode.hint": "Legt fest, ob Figuren von Akteuren, für die der Spieler nur beschränkte Rechte hat, Sicht gewähren können, wenn alle eigenen Figuren des Spielers besiegt (tot), versteinert oder bewusstlos sind.",
+    "VISION5E.SETTINGS.allowPlayerSpectatorModeAnytime.label": "Spielern erlauben, den Zuschauermodus jederzeit zu verwenden",
+    "VISION5E.SETTINGS.allowPlayerSpectatorModeAnytime.hint": "Erlaubt Spielern, den Zuschauermodus manuell über die Token-Steuerung zu aktivieren, selbst wenn sie noch einen wahrnehmenden Token kontrollieren. Wenn aktiv, wird geteilte Zuschauer-Sicht zusätzlich zur eigenen Tokensicht gewährt.",
+    "VISION5E.CONTROLS.playerSpectatorMode.label": "Zuschauermodus aktivieren",
     "VISION5E.TOOLTIPS.AutomaticallyManaged": "Automatisch verwaltet von Vision 5e",
     "VISION5E.TOOLTIPS.SelectVisionMode": "Sichtmodus auswählen"
 }

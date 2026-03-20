@@ -1,5 +1,5 @@
 import { DETECTION_LEVELS } from "./const.mjs";
-import { spectatorMode } from "./settings.mjs";
+import { isPlayerSpectatorModeActive, spectatorMode } from "./settings.mjs";
 import { fromFeet } from "./utils.mjs";
 
 export default (Token) => class extends Token {
@@ -94,14 +94,19 @@ export default (Token) => class extends Token {
             return true;
         }
 
-        // A token that is defeated, petrified, or unconscious cannot perceive anything
+        // A token that is defeated, petrified, or unconscious cannot perceive anything.
+        // Tokens that can still perceive normally block spectator sharing unless the player
+        // explicitly enabled the manual spectator overlay from Token controls.
         const canPerceive = (token) => !token.document.hidden && token.hasSight
             && !(token.document.hasStatusEffect(CONFIG.specialStatusEffects.DEFEATED)
                 || token.document.hasStatusEffect(CONFIG.specialStatusEffects.PETRIFIED)
                 || token.document.hasStatusEffect(CONFIG.specialStatusEffects.UNCONSCIOUS));
 
-        // If the user controls that can perceive something, ...
-        if (this.layer.controlled.some(canPerceive)) {
+        const playerSpectatorModeActive = isPlayerSpectatorModeActive();
+
+        // If the user controls a token that can perceive something, spectator sharing only applies
+        // when the player manually opted into the additive spectator mode.
+        if (!playerSpectatorModeActive && this.layer.controlled.some(canPerceive)) {
             // ... this token is not a source of vision
             return false;
         }
@@ -119,8 +124,8 @@ export default (Token) => class extends Token {
             return false;
         }
 
-        // If the user does not have a token that can perceive something,
-        // this token is a source of vision if the user has limited permissions and the actor has a player owner
+        // If the user still has no non-controlled observed token that can perceive something,
+        // limited permission tokens owned by another player can become additive spectator sources.
         return this.actor.testUserPermission(game.user, CONST.DOCUMENT_OWNERSHIP_LEVELS.LIMITED) && this.actor.hasPlayerOwner;
     }
 

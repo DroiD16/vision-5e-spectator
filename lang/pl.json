@@ -20,6 +20,9 @@
     "VISION5E.SETTINGS.defaultHearingRange.hint": "Konfiguruje domyślną odległość słyszalności tokenów. Wymaga przeładowania świata.",
     "VISION5E.SETTINGS.spectatorMode.label": "Tryb widza",
     "VISION5E.SETTINGS.spectatorMode.hint": "Skonfiguruj, czy tokeny należące do aktorów, dla których gracz ma ograniczone uprawnienia, mogą zapewniać widoczność, gdy wszystkie tokeny gracza zostaną pokonane, skamieniałe lub nieprzytomne.",
+    "VISION5E.SETTINGS.allowPlayerSpectatorModeAnytime.label": "Pozwól graczom używać trybu widza w dowolnym momencie",
+    "VISION5E.SETTINGS.allowPlayerSpectatorModeAnytime.hint": "Pozwala graczom ręcznie włączyć tryb widza z poziomu kontroli tokena, nawet jeśli nadal kontrolują token zdolny do postrzegania. Gdy opcja jest aktywna, współdzielone widzenie widza jest dodawane do widzenia własnego tokena.",
+    "VISION5E.CONTROLS.playerSpectatorMode.label": "Włącz tryb widza",
     "VISION5E.TOOLTIPS.AutomaticallyManaged": "Automatycznie zarządzane przez Vision 5e",
     "VISION5E.TOOLTIPS.SelectVisionMode": "Wybierz tryb widoku"
 }
