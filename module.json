@@ -8,11 +8,10 @@
       "email": "dev7355608@gmail.com"
     }
   ],
-  "version": "3.0.9-spectator.1",
+  "version": "3.1.1-spectator.1",
   "compatibility": {
     "minimum": "13",
-    "verified": "13",
-    "maximum": "13"
+    "verified": "14.360"
   },
   "scripts": [
     "script.js"
@@ -64,15 +63,15 @@
         "type": "system",
         "compatibility": {
           "minimum": "5.0.0",
-          "verified": "5.2.5"
+          "verified": "5.3.0"
         }
       }
     ]
   },
   "url": "https://github.com/DroiD16/vision-5e-spectator",
   "manifest": "https://github.com/DroiD16/vision-5e-spectator/releases/latest/download/module.json",
-  "download": "https://github.com/DroiD16/vision-5e-spectator/releases/download/v3.0.9-spectator.1/module.zip",
-  "changelog": "https://github.com/DroiD16/vision-5e-spectator/releases/tag/v3.0.9",
+  "download": "https://github.com/DroiD16/vision-5e-spectator/releases/download/v3.1.1-spectator.1/module.zip",
+  "changelog": "https://github.com/DroiD16/vision-5e-spectator/releases/tag/v3.1.1-spectator.1",
   "bugs": "https://github.com/DroiD16/vision-5e-spectator/issues",
   "readme": "https://raw.githubusercontent.com/DroiD16/vision-5e-spectator/main/README.md",
   "license": "https://raw.githubusercontent.com/DroiD16/vision-5e-spectator/main/LICENSE"
