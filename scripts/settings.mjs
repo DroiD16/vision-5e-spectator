@@ -259,12 +259,12 @@ Hooks.on("renderSettingsConfig", (application, element, context, options) => {
 });
 
 function updateAnytimeInputAvailability(element) {
-    const spectatorInput =
-        element.querySelector(`input[name="spectatorMode"]`)
-        ?? element.querySelector(`input[name="vision-5e.spectatorMode"]`);
-    const anytimeInput =
-        element.querySelector(`input[name="allowPlayerSpectatorModeAnytime"]`)
-        ?? element.querySelector(`input[name="vision-5e.allowPlayerSpectatorModeAnytime"]`);
+    const spectatorInput
+        = element.querySelector(`input[name="spectatorMode"]`)
+            ?? element.querySelector(`input[name="vision-5e.spectatorMode"]`);
+    const anytimeInput
+        = element.querySelector(`input[name="allowPlayerSpectatorModeAnytime"]`)
+            ?? element.querySelector(`input[name="vision-5e.allowPlayerSpectatorModeAnytime"]`);
 
     if (!spectatorInput || !anytimeInput) {
         return;
