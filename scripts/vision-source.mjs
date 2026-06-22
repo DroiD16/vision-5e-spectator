@@ -9,7 +9,7 @@ export default (PointVisionSource) => class extends PointVisionSource {
     };
 
     /** @type {boolean|undefined} */
-    #losHasDarknessEdge;
+    #sourceEdgeInLOS;
 
     /** @type {boolean} */
     #blindedByDarkness;
@@ -30,7 +30,7 @@ export default (PointVisionSource) => class extends PointVisionSource {
 
         if (this.data.disabled || this.suppressed) {
             polygon = this.los;
-        } else if (!this.blinded.darkness && !(this.#losHasDarknessEdge ??= this.los.edges.some((edge) => edge.type === "darkness"))) {
+        } else if (!this.blinded.darkness && !this.#isSourceEdgeInLOS()) {
             polygon = this.los;
         } else {
             const config = this._getPolygonConfiguration();
@@ -89,7 +89,7 @@ export default (PointVisionSource) => class extends PointVisionSource {
     _createShapes() {
         this._updateVisionMode();
 
-        this.#losHasDarknessEdge = undefined;
+        this.#sourceEdgeInLOS = undefined;
         this.#blindedByDarkness = this.blinded.darkness;
 
         if (this.priority !== 0) {
@@ -169,5 +169,25 @@ export default (PointVisionSource) => class extends PointVisionSource {
         const density = PIXI.Circle.approximateVertexDensity(radius);
 
         return los.applyConstraint(circle, { density, scalingFactor: CONST.CLIPPER_SCALING_FACTOR });
+    }
+
+    /**
+     * Is LOS constrained by a darkness source?
+     * @returns {boolean}
+     */
+    #isSourceEdgeInLOS() {
+        if (this.#sourceEdgeInLOS === undefined) {
+            let type;
+
+            if (game.release.generation >= 14) {
+                type = "source";
+            } else {
+                type = "darkness";
+            }
+
+            this.#sourceEdgeInLOS = this.los.edges.some((edge) => edge.type === type);
+        }
+
+        return this.#sourceEdgeInLOS;
     }
 };
