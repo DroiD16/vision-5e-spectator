@@ -119,6 +119,7 @@ The automation detects relevant feats and effects that affect the creatures sens
   - Cannot detect anything on its own and requires another sense to see the target without the _ethereal_ and _invisible_ status.
   - Is not restricted by walls or blocked by darkness sources.
   - Configured automatically for actors with the `See Invisibility`[\*](#translations) effect and PC actors with the `The Third Eye: See Invisibility`[\*](#translations) _(Class Feature: Wizard, PHB'14 116)_ feat.
+  - Unlimited range by default. A finite range (in feet) can be set per effect via a `flags.vision-5e.seeInvisibilityRange` [Active Effect](#active-effects) change.
 - **Thermal Vision** _(Ancestry Feature: Ashka, Ember)_
   - Detects beasts, celestials, dragons, feys, fiends, giants, humanoids, monstrosities, and other warm-blooded creatures. Also detects any creature that is _burning_.
   - Cannot detect actors that are _burrowing_ or _ethereal_.
@@ -183,7 +184,7 @@ Optionally, the GM can allow players to manually enable _Spectator Mode_ from th
 | Hearing                   | `token.detectionModes.hearing.range`                |
 | Life Sense                | `token.detectionModes.lifeSense.range`              |
 | Light Perception          | `token.detectionModes.lightPerception.range`        |
-| See Invisibility          | `token.detectionModes.seeInvisibility.range`        |
+| See Invisibility          | `flags.vision-5e.seeInvisibilityRange`              |
 | Thermal Vision            | `token.detectionModes.thermalVision`                |
 | Tremorsense               | `system.attributes.senses.ranges.tremorsense`       |
 | Truesight                 | `system.attributes.senses.ranges.truesight`         |
@@ -192,6 +193,8 @@ Optionally, the GM can allow players to manually enable _Spectator Mode_ from th
 _Note: Pre V14 replace `token.` by `ATL.` (requires the [Active Token Effects](https://foundryvtt.com/packages/ATL) module)._
 
 _Note: Pre dnd5e 5.3.0 replace `.senses.ranges.` by `.senses.`._
+
+_Note: See Invisibility is unlimited by default. To give it a finite range, add a `flags.vision-5e.seeInvisibilityRange` change (value in feet, e.g. `30`) to the same effect that grants See Invisibility. The range is read per effect, so a finite range on one source never lowers the unlimited range granted by another See Invisibility source on the same actor._
 
 ---
 

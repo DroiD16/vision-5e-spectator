@@ -156,6 +156,33 @@ function upgradeDetectionMode(actor, id, range, units) {
 }
 
 /**
+ * Get the See Invisibility range (in feet) configured on an effect, or `Infinity` if none is set.
+ *
+ * The range is read from a `flags.vision-5e.seeInvisibilityRange` change on the effect itself (not
+ * from the applied actor flag) so that it stays per-effect: a finite range on one See Invisibility
+ * source never lowers the unlimited range granted by another See Invisibility source on the same actor.
+ * @param {ActiveEffect} effect
+ * @returns {number}
+ */
+function seeInvisibilityRange(effect) {
+    let range = 0;
+
+    for (const change of effect.changes) {
+        if (change.key === "flags.vision-5e.seeInvisibilityRange") {
+            // parseFloat (not Number) so a value with a unit suffix such as "30 ft" still yields 30
+            // instead of NaN silently falling back to the unlimited default.
+            const value = parseFloat(change.value);
+
+            if (value > 0) {
+                range = Math.max(range, value);
+            }
+        }
+    }
+
+    return range || Infinity;
+}
+
+/**
  * @param {Document} document
  * @param {string} units
  * @param {number} [defaultRange]
@@ -358,7 +385,7 @@ const EFFECT_REGISTRY = {
             this.statuses.add(CONFIG.specialStatusEffects.NONDETECTION);
         },
         seeInvisibility(effect) {
-            upgradeDetectionMode(this, "seeInvisibility", Infinity);
+            upgradeDetectionMode(this, "seeInvisibility", seeInvisibilityRange(effect), "ft");
         },
         sequester(effect) {
             this.statuses.add(CONFIG.specialStatusEffects.NONDETECTION);
@@ -384,7 +411,7 @@ const EFFECT_REGISTRY = {
             this.statuses.add(CONFIG.specialStatusEffects.NONDETECTION);
         },
         seeInvisibility(effect) {
-            upgradeDetectionMode(this, "seeInvisibility", Infinity);
+            upgradeDetectionMode(this, "seeInvisibility", seeInvisibilityRange(effect), "ft");
         },
         sequester(effect) {
             this.statuses.add(CONFIG.specialStatusEffects.NONDETECTION);
