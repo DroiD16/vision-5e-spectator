@@ -8,7 +8,7 @@ export default (TokenConfig) => class extends TokenConfig {
         }
 
         // Disable input fields that are automatically managed by Vision 5e
-        for (const element of this.element.querySelectorAll(`[name="sight.range"],[name="sight.brightness"],[name="sight.saturation"],[name="sight.contrast"]`)) {
+        for (const element of this.element.querySelectorAll(`[name="sight.range"]`)) {
             element.disabled = true;
             element.dataset.tooltip = "VISION5E.TOOLTIPS.AutomaticallyManaged";
         }

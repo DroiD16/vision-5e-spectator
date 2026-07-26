@@ -55,6 +55,11 @@ export default (Token) => class extends Token {
             return false;
         }
 
+        // Only tokens in the viewed level can see
+        if (game.release.generation >= 14 && this.document.level !== canvas.level.id) {
+            return false;
+        }
+
         const isGM = game.user.isGM;
 
         // Only display hidden tokens for the GM
@@ -67,17 +72,17 @@ export default (Token) => class extends Token {
             return true;
         }
 
-        // Otherwise, vision is ignored for GM users
-        if (isGM) {
-            return false;
-        }
-
         // At this point only tokens with an actor could be a source of vision
         if (!this.actor) {
             return false;
         }
 
         if (!spectatorMode) {
+            // Otherwise, vision is ignored for GM users
+            if (isGM) {
+                return false;
+            }
+
             // If the user doesn't have observer permissions, ...
             if (!this.actor.testUserPermission(game.user, CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER)) {
                 // ... this token is not source of vision
@@ -94,6 +99,10 @@ export default (Token) => class extends Token {
             return true;
         }
 
+        if (isGM && (this.document.hidden || this.layer.controlled.length === 0)) {
+            return false;
+        }
+
         // A token that is defeated, petrified, or unconscious cannot perceive anything.
         // Tokens that can still perceive normally block spectator sharing unless the player
         // explicitly enabled the manual spectator overlay from Token controls.
@@ -102,7 +111,7 @@ export default (Token) => class extends Token {
                 || token.document.hasStatusEffect(CONFIG.specialStatusEffects.PETRIFIED)
                 || token.document.hasStatusEffect(CONFIG.specialStatusEffects.UNCONSCIOUS));
 
-        const playerSpectatorModeActive = isPlayerSpectatorModeActive();
+        const playerSpectatorModeActive = !isGM && isPlayerSpectatorModeActive();
 
         // If the user controls a token that can perceive something, spectator sharing only applies
         // when the player manually opted into the additive spectator mode.
@@ -111,22 +120,31 @@ export default (Token) => class extends Token {
             return false;
         }
 
+        const users = isGM
+            ? game.users.filter((user) => !user.isGM && this.layer.controlled.some((token) => token.actor?.testUserPermission(user, CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER)))
+            : [game.user];
+
+        if (users.length === 0) {
+            return false;
+        }
+
         // If the user has observer permissions, ...
-        if (this.actor.testUserPermission(game.user, CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER)) {
+        if (users.some((user) => this.actor.testUserPermission(user, CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER))) {
             // ... this token is a source of vision
             return true;
         }
 
         // If the user is the owner or observer of a token that can perceive something but isn't controlling it, ...
         if (this.layer.placeables.some((token) => !token.controlled && canPerceive(token)
-            && token.actor?.testUserPermission(game.user, CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER))) {
+            && token.actor && users.some((user) => token.actor.testUserPermission(user, CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER)))) {
             // ... this token is not a source of vision
             return false;
         }
 
-        // If the user still has no non-controlled observed token that can perceive something,
-        // limited permission tokens owned by another player can become additive spectator sources.
-        return this.actor.testUserPermission(game.user, CONST.DOCUMENT_OWNERSHIP_LEVELS.LIMITED) && this.actor.hasPlayerOwner;
+        // If the user does not have a token that can perceive something,
+        // this token is a source of vision if the user has limited permissions and the actor has a player owner
+        return users.some((user) => this.actor.testUserPermission(user, CONST.DOCUMENT_OWNERSHIP_LEVELS.LIMITED))
+            && (isGM || this.actor.hasPlayerOwner);
     }
 
     /** @override */
@@ -231,8 +249,9 @@ export default (Token) => class extends Token {
         } else if (statusId === CONFIG.specialStatusEffects.DEFEATED
             || statusId === CONFIG.specialStatusEffects.PETRIFIED
             || statusId === CONFIG.specialStatusEffects.UNCONSCIOUS) {
-            if (!this.document.hidden && this.hasSight && !game.user.isGM
-                && this.actor?.testUserPermission(game.user, CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER)) {
+            if (!this.document.hidden && this.hasSight && (this.controlled
+                || (!game.user.isGM && this.actor?.testUserPermission(game.user, CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER)
+                    || game.user.isGM && this.layer.controlled.length !== 0))) {
                 for (const token of this.layer.placeables) {
                     if (token !== this && !token.vision === token._isVisionSource()) {
                         token.initializeVisionSource();

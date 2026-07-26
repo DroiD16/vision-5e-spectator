@@ -227,7 +227,7 @@ function isVisibleMagicItem(item) {
  * @returns {boolean}
  */
 function isMagicEffect(effect) {
-    return effect.flags.dnd5e?.spellLevel !== undefined && !effect.statuses.has(CONFIG.specialStatusEffects.CONCENTRATING);
+    return effect.system.magical ?? (effect.flags.dnd5e?.spellLevel !== undefined && !effect.statuses.has(CONFIG.specialStatusEffects.CONCENTRATING));
 }
 
 /**

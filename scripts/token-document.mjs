@@ -2,31 +2,28 @@ import { convertUnits, fromFeet } from "./utils.mjs";
 
 export default (TokenDocument) => class extends TokenDocument {
     /** @override */
-    prepareBaseData() {
-        super.prepareBaseData();
+    prepareDerivedData() {
+        super.prepareDerivedData();
 
         this._prepareSight();
     }
 
     /** @override */
     _prepareDetectionModes() {
-        this._clearDetectionModes();
-
         if (!this.sight.enabled) {
+            this._clearDetectionModes();
+
             return;
         }
 
-        for (const [id, { enabled, range }] of this._getDetectionModes(true)) {
-            if (!(id in CONFIG.Canvas.detectionModes)) {
-                continue;
-            }
-
-            this._setDetectionMode(id, range ?? Infinity, enabled);
+        for (const [_id, mode] of this._getDetectionModes()) {
+            mode.enabled ??= true;
+            mode.range ??= Infinity;
         }
 
         const sceneUnits = this.parent?.grid.units || "";
 
-        if (this.actor?.detectionModes) {
+        if (!this.isLazyDelta && this.actor?.detectionModes) {
             const actorUnits = this.actor.system.attributes?.senses?.units ?? "ft";
 
             for (const [id, range] of Object.entries(this.actor.detectionModes)) {
@@ -65,32 +62,31 @@ export default (TokenDocument) => class extends TokenDocument {
             return;
         }
 
-        const detectionMode = VISION_TO_DETECTION_MODE_MAPPING[this._source.sight.visionMode];
-        const mode = this._getDetectionMode(detectionMode);
+        const detectionMode = VISION_TO_DETECTION_MODE_MAPPING[this.sight.visionMode];
+        const mode = detectionMode ? this._getDetectionMode(detectionMode) : null;
 
         if (mode && mode.enabled && mode.range > 0) {
             this.sight.range = mode.range;
-            this.sight.visionMode = this._source.sight.visionMode;
             this.sight.detectionMode = detectionMode;
-        } else {
-            this.sight.range = 0;
-            this.sight.visionMode = "basic";
-            this.sight.detectionMode = "basicSight";
 
-            for (const [visionMode, detectionMode] of Object.entries(VISION_TO_DETECTION_MODE_MAPPING)) {
-                const mode = this._getDetectionMode(detectionMode);
-
-                if (!mode || !mode.enabled || this.sight.range >= mode.range) {
-                    continue;
-                }
-
-                this.sight.range = mode.range;
-                this.sight.visionMode = visionMode;
-                this.sight.detectionMode = detectionMode;
-            }
+            return;
         }
 
-        this.sight.angle = this._source.sight.angle;
+        this.sight.range = 0;
+        this.sight.visionMode = "basic";
+        this.sight.detectionMode = "basicSight";
+
+        for (const [visionMode, detectionMode] of Object.entries(VISION_TO_DETECTION_MODE_MAPPING)) {
+            const mode = this._getDetectionMode(detectionMode);
+
+            if (!mode || !mode.enabled || this.sight.range >= mode.range) {
+                continue;
+            }
+
+            this.sight.range = mode.range;
+            this.sight.visionMode = visionMode;
+            this.sight.detectionMode = detectionMode;
+        }
 
         if (this.sight.visionMode === "basic") {
             this.sight.visionMode = "darkvision";
@@ -104,9 +100,9 @@ export default (TokenDocument) => class extends TokenDocument {
 
             this.sight.color = color !== undefined ? color : this._source.sight.color !== null ? foundry.utils.Color.from(this._source.sight.color) : null;
             this.sight.attenuation = attenuation !== undefined ? attenuation : this._source.sight.attenuation;
-            this.sight.brightness = brightness !== undefined ? brightness : 0;
-            this.sight.saturation = saturation !== undefined ? saturation : 0;
-            this.sight.contrast = contrast !== undefined ? contrast : 0;
+            this.sight.brightness = brightness !== undefined ? brightness : this._source.sight.brightness;
+            this.sight.saturation = saturation !== undefined ? saturation : this._source.sight.saturation;
+            this.sight.contrast = contrast !== undefined ? contrast : this._source.sight.contrast;
         }
     }
 
@@ -151,19 +147,16 @@ export default (TokenDocument) => class extends TokenDocument {
     }
 
     /**
-     * @param {boolean} [source]
      * @returns {Generator<{ range: number; enabled: boolean }>}
      * @internal
      */
-    * _getDetectionModes(source = false) {
-        const detectionModes = source ? this._source.detectionModes : this.detectionModes;
-
+    * _getDetectionModes() {
         if (game.release.generation >= 14) {
-            for (const [id, mode] of Object.entries(detectionModes)) {
+            for (const [id, mode] of Object.entries(this.detectionModes)) {
                 yield [id, mode];
             }
         } else {
-            for (const mode of detectionModes) {
+            for (const mode of this.detectionModes) {
                 yield [mode.id, mode];
             }
         }

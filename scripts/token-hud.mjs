@@ -11,8 +11,9 @@ export default (TokenHUD) => class extends TokenHUD {
         const result = await super._renderHTML(context, options);
 
         const visionModes = this.#getSelectableVisionModes();
+        const isVisionModeOverridden = foundry.utils.hasProperty(this.document.overrides ?? {}, "sight.visionMode");
 
-        if (visionModes.length > 1) {
+        if (visionModes.length > 1 && !isVisionModeOverridden) {
             const button = document.createElement("button");
 
             button.classList.add("control-icon");

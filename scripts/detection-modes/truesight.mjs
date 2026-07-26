@@ -51,7 +51,7 @@ export default class DetectionModeTruesight extends DetectionMode {
             return true;
         }
 
-        const los = visionSource.getLOS(0);
+        const los = visionSource.getLOS(100);
 
         if (los !== visionSource.los) {
             return los.contains(test.point.x, test.point.y);
