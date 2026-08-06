@@ -19,7 +19,32 @@ export default (TokenConfig) => class extends TokenConfig {
 
         // Set vision range to the prepared preview vision range
         this.element.querySelector(`[name="sight.range"]`).value = this._preview.sight.range;
-        this.element.querySelector(`[name="sight.visionMode"]`).value = this._preview.sight.visionMode;
+
+        // Set vision mode to the prepared preview vision mode
+        const visionMode = this._preview.sight.visionMode;
+        const visionModeInput = this.element.querySelector(`[name="sight.visionMode"]`);
+
+        if (visionModeInput.value !== visionMode) {
+            visionModeInput.value = visionMode;
+
+            for (const [key, value] of Object.entries(CONFIG.Canvas.visionModes[visionMode]?.vision.defaults ?? {})) {
+                if (value === undefined) {
+                    continue;
+                }
+
+                const field = this.element.querySelector(`[name="sight.${key}"]`);
+
+                if (!field) {
+                    continue;
+                }
+
+                if (field.type === "checkbox") {
+                    field.checked = value;
+                } else {
+                    field.value = value;
+                }
+            }
+        }
     }
 
     /** @override */
