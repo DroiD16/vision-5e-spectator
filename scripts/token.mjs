@@ -113,38 +113,50 @@ export default (Token) => class extends Token {
 
         const playerSpectatorModeActive = !isGM && isPlayerSpectatorModeActive();
 
-        // If the user controls a token that can perceive something, spectator sharing only applies
-        // when the player manually opted into the additive spectator mode.
-        if (!playerSpectatorModeActive && this.layer.controlled.some(canPerceive)) {
-            // ... this token is not a source of vision
-            return false;
+        for (const user of isGM ? game.users : [game.user]) {
+            if (isGM && user.isGM) {
+                continue;
+            }
+
+            let controlled = this.layer.controlled;
+
+            if (isGM) {
+                controlled = controlled.filter((token) => !token.document.hidden && token.hasSight
+                    && token.actor?.testUserPermission(user, CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER));
+
+                if (controlled.length === 0) {
+                    continue;
+                }
+            }
+
+            // A player can opt into additive spectator vision while their token can perceive.
+            // For the GM, evaluate the controlled tokens separately for each player.
+            if (!playerSpectatorModeActive && controlled.some(canPerceive)) {
+                // ... this token is not a source of vision
+                continue;
+            }
+
+            // If the user has observer permissions, ...
+            if (this.actor.testUserPermission(user, CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER)) {
+                // ... this token is a source of vision
+                return true;
+            }
+
+            // If the user is the owner or observer of a token that can perceive something but isn't controlling it, ...
+            if (this.layer.placeables.some((token) => !token.controlled && canPerceive(token)
+                && token.actor?.testUserPermission(user, CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER))) {
+                // ... this token is not a source of vision
+                continue;
+            }
+
+            // If the user does not have a token that can perceive something,
+            // this token is a source of vision if the user has limited permissions and the actor has a player owner
+            if (this.actor.testUserPermission(user, CONST.DOCUMENT_OWNERSHIP_LEVELS.LIMITED) && this.actor.hasPlayerOwner) {
+                return true;
+            }
         }
 
-        const users = isGM
-            ? game.users.filter((user) => !user.isGM && this.layer.controlled.some((token) => token.actor?.testUserPermission(user, CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER)))
-            : [game.user];
-
-        if (users.length === 0) {
-            return false;
-        }
-
-        // If the user has observer permissions, ...
-        if (users.some((user) => this.actor.testUserPermission(user, CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER))) {
-            // ... this token is a source of vision
-            return true;
-        }
-
-        // If the user is the owner or observer of a token that can perceive something but isn't controlling it, ...
-        if (this.layer.placeables.some((token) => !token.controlled && canPerceive(token)
-            && token.actor && users.some((user) => token.actor.testUserPermission(user, CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER)))) {
-            // ... this token is not a source of vision
-            return false;
-        }
-
-        // If the user does not have a token that can perceive something,
-        // this token is a source of vision if the user has limited permissions and the actor has a player owner
-        return users.some((user) => this.actor.testUserPermission(user, CONST.DOCUMENT_OWNERSHIP_LEVELS.LIMITED))
-            && (isGM || this.actor.hasPlayerOwner);
+        return false;
     }
 
     /** @override */

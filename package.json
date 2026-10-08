@@ -18,6 +18,7 @@
         "clean": "rimraf module.zip script.js script.js.map",
         "lint": "eslint",
         "lint:fix": "eslint --fix",
+        "test": "node --test tests/*.test.mjs",
         "watch": "rollup -c -w --environment BUILD:development"
     },
     "devDependencies": {
